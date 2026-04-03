@@ -5,6 +5,13 @@
 #include <iostream>
 #include <map>
 
+Player::Player() : _hasAnchor(false) {
+
+    std::string names[] = { "Sam", "Billy", "Jen", "Bob", "Sally", "Joe", "Sue", "Sasha", "Tina", "Marge" };
+
+    _name = names[rand() % 10];
+}
+
 Player::~Player() {
     for (auto i = 0; i < _playArea.size(); i++) {
         delete _playArea[i];

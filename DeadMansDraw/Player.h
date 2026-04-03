@@ -16,7 +16,7 @@ private:
     bool _hasAnchor;
 
 public:
-    Player(const std::string& name) : _name(name), _hasAnchor(false) {}
+    Player();
     ~Player() {}
 
     //Base player actions
