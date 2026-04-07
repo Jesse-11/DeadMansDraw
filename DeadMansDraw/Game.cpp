@@ -122,7 +122,6 @@ void Game::nextTurn() {
     Player* currentPlayer = _gamePlayers[_currentPlayerIndex];
 
     std::cout << "Round " << _currentRound << ", Turn " << _currentTurn << ": " << currentPlayer->getPlayerName() << "'s turn.\n";
-    std::cout << currentPlayer->getPlayerName()  << " turn.\n";
 
     //Bank and current score
     currentPlayer->printPlayerBank();
