@@ -88,7 +88,7 @@ void OracleCard::play(Game& game, Player& player) {
 
     if (!gameDeck.empty()) {
         Card* topCard = gameDeck.back();
-        std::cout << "The Oracle sses a " << topCard->str() << "\n";
+        std::cout << "The Oracle sees a " << topCard->str() << "\n";
     }
     else {
         std::cout << "The deck is empty. No card to peek at.\n";
@@ -310,7 +310,7 @@ void KeyCard::play(Game& game, Player& player) {
 
 void KeyCard::chestAndKey(Game& game, Player& player) {
     // Implemnted for both within the Chest logic. 
-    // Not doing it here as it would cause double logic issues.
+    // Doing it here as it would cause double logic issues.
 }
 
 
