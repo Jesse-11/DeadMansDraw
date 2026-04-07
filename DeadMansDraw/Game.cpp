@@ -65,7 +65,7 @@ void Game::initializeDeck() {
 void Game::shuffleDeck() {
     CardCollection shuffleDeck{ _gameDeck.begin(), _gameDeck.end() };
 
-    //Logic to generate random seed and shuffle deck based on ai and online resources
+    //Logic to generate random based on spec sheet
     std::random_device random;
     std::mt19937 generator(random());
 
@@ -74,7 +74,8 @@ void Game::shuffleDeck() {
 }
 
 void Game::startGame() {
-    GAME_TITLE;
+    //Run game title
+    std::cout << GAME_TITLE << "\n";
 
     //Main loop
     while (!_gameDeck.empty()) {
@@ -122,8 +123,11 @@ void Game::nextTurn() {
         //Play drawn card and check if player busted
         bool busted = currentPlayer->playCard(*this, drawnCard);
 
-        if (busted) {
-            currentPlayer->bust(*this);
+        if (busted || currentPlayer->getPlayAreaSize() == 0) {
+
+            if (busted) {
+                currentPlayer->bust(*this);
+            }
             turnStillGoing = false;
         }
         else {

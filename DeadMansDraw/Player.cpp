@@ -5,6 +5,35 @@
 #include <iostream>
 #include <map>
 #include <cstdlib>
+#include <algorithm>
+
+//Helper functions
+void printCardCollection(const CardCollection& collection, const std::string collectionTitle) {
+    std::cout << collectionTitle << "\n";
+
+    if (collection.empty()) {
+        return;
+    }
+
+    std::map<CardType, std::vector<Card*>> groupedCards;
+    for (Card* card : collection) {
+        groupedCards[card->getCardType()].push_back(card);
+    }
+
+    for (auto& pair : groupedCards) {
+        // Sort descending by value
+        std::sort(pair.second.begin(), pair.second.end(), [](Card* firstCard, Card* secondCard) {
+            return firstCard->getCardValue() > secondCard->getCardValue();
+            });
+
+        for (Card* card : pair.second) {
+            std::cout << card->str() << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+
 
 Player::Player() : _anchorIndex(-1) {
 
@@ -14,10 +43,10 @@ Player::Player() : _anchorIndex(-1) {
 }
 
 Player::~Player() {
-    for (auto i = 0; i < _playArea.size(); i++) {
+    for (size_t i = 0; i < _playArea.size(); i++) {
         delete _playArea[i];
     }
-    for (auto i = 0; i < _bank.size(); i++) {
+    for (size_t i = 0; i < _bank.size(); i++) {
         delete _bank[i];
     }
 }
@@ -98,4 +127,12 @@ int Player::getAndCalculateScore() const {
         totalScore += cardPair.second;
     }
     return totalScore;
+}
+
+void Player::printPlayerPlayArea() const {
+    printCardCollection(_playArea, getPlayerName() + "'s play area: ");
+}
+
+void Player::printPlayerBank() const {
+    printCardCollection(_bank, getPlayerName() + "'s bank: ");
 }

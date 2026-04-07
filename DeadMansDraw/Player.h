@@ -18,7 +18,7 @@ private:
 
 public:
     Player();
-    ~Player() {}
+    ~Player();
 
     //Base player actions
     bool playCard(Game& game, Card* card);

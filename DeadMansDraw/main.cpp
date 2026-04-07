@@ -7,7 +7,7 @@ int main()
 {
     std::cout << "Initializing Dead Man's Draw\n";
     Game game;
-    Game->startGame();
+    game.startGame();
 
     return 0;
 }
