@@ -136,6 +136,9 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\OneDrive\UniversityOfAdelaide\Software Engineering\Year 4\Design Patterns in C++\Dead Mans Draw - Class Diagram.pdf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
