@@ -57,7 +57,7 @@ void Game::initializeDeck() {
         _gameDeck.push_back(new KrakenCard(mermaidCardValues[i]));
 
         //Bonus anchor
-        _gameDeck.push_back(new AnchorCard(cardValues[i]));
+        _gameDeck.push_back(new AnchorCard(normalCardValues[i]));
 
         //Mermaid cards
         _gameDeck.push_back(new MermaidCard(mermaidCardValues[i]));
@@ -87,7 +87,7 @@ void Game::startGame() {
     std::cout << GAME_TITLE << "\n";
 
     //Main loop
-    while (!_gameDeck.empty() && -_currentRound <= 20) {
+    while (!_gameDeck.empty() && _currentRound <= 20) {
         nextTurn();
     }
 
