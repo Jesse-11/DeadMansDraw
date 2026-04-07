@@ -3,6 +3,7 @@
 
 #include <vector>
 
+// Card types as specified in the assignment spec (Anchor included for bonus marks)
 enum class CardType {
 	Cannon, Chest, Key, Anchor, Kraken, Map, Oracle, Mermaid, Hook, Sword
 };

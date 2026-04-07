@@ -28,10 +28,10 @@ Game::~Game() {
 }
 
 /// <summary>
-/// Returns a pointer to the other player. Used for card abilities that interact with the other player.
+/// Get a reference to the other player
 /// </summary>
 /// <param name="currentPlayer"></param>
-/// <returns></returns>
+/// <returns>Returns a pointed to the other players index</returns>
 Player* Game::getTheOtherPlayer(const Player* currentPlayer) const {
     if (currentPlayer == _gamePlayers[0]) {
         return _gamePlayers[1];
@@ -41,6 +41,9 @@ Player* Game::getTheOtherPlayer(const Player* currentPlayer) const {
     }
 }
 
+/// <summary>
+/// Initializes the game deck by creating and adding all card types with their respective values.
+/// </summary>
 void Game::initializeDeck() {
     int cardValues[] = { 2,3,4,5,6,7 };
     int mermaidCardValues[] = { 4,5,6,7,8,9 };
@@ -62,6 +65,9 @@ void Game::initializeDeck() {
     }
 }
 
+/// <summary>
+/// Randomly shuffles the game deck using the Mersenne Twister algorithm. Algorithm provided by spec sheet. Not seeded
+/// </summary>
 void Game::shuffleDeck() {
     CardCollection shuffleDeck{ _gameDeck.begin(), _gameDeck.end() };
 
@@ -73,6 +79,9 @@ void Game::shuffleDeck() {
     std::copy(shuffleDeck.begin(), shuffleDeck.end(), _gameDeck.begin());
 }
 
+/// <summary>
+/// Starts and runs the main game loop, then determines and announces the winner.
+/// </summary>
 void Game::startGame() {
     //Run game title
     std::cout << GAME_TITLE << "\n";
@@ -82,7 +91,6 @@ void Game::startGame() {
         nextTurn();
     }
 
-    //Game over
     std::cout << "Game over! \n";
 
     _gamePlayers[0]->printPlayerBank();
@@ -102,6 +110,10 @@ void Game::startGame() {
     }
 }
 
+/// <summary>
+/// Executed the logic for a single players turn, rounds, and switching between players. 
+/// Handles player input for whether to continue playing or bank, and checks for busts and end of game conditions.
+/// </summary>
 void Game::nextTurn() {
     Player* currentPlayer = _gamePlayers[_currentPlayerIndex];
 
@@ -124,7 +136,7 @@ void Game::nextTurn() {
         bool busted = currentPlayer->playCard(*this, drawnCard);
 
         if (busted || currentPlayer->getPlayAreaSize() == 0) {
-
+            //This was needed to fix issues of busting under kraken ability.
             if (busted) {
                 currentPlayer->bust(*this);
             }

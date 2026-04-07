@@ -9,19 +9,30 @@
 #include <algorithm>
 
 // Helper functions
-int getCurrentPlayerChoice(int numChoices) {
+
+/// <summary>
+/// Helper function to return a valid players choice based on avaliable options (mainly card abilities)
+/// </summary>
+/// <param name="numberOfPlayerChoices"></param>
+/// <returns>An int referencing an indexed option pasted to the terminal</returns>
+int getCurrentPlayerChoice(int numberOfPlayerChoice) {
     int playerChoice = 0;
     
-    std::cout << "Which card do you pick? ";
+    std::cout << "Which card do you want to pick? ";
     std::cin >> playerChoice;
 
-    while (playerChoice < 1 || playerChoice > numChoices) {
-        std::cout << "Invalid. Which card do you pick? ";
+    while (playerChoice < 1 || playerChoice > numberOfPlayerChoice) {
+        std::cout << "Invalid choice. Which card do you pick? ";
         std::cin >> playerChoice;
     }
     return playerChoice;
 }
 
+/// <summary>
+/// Helper function to return the highest value card of each suit from a players bank
+/// </summary>
+/// <param name="bank"></param>
+/// <returns>Returns a vector of each hyighest values card of each suit</returns>
 std::vector<Card*> getBestCardOfEachSuitFromBank(const CardCollection& bank) {
     std::map<CardType, Card*> bestCardOfEachSuitMap;
     for (Card* card : bank) {
@@ -38,6 +49,11 @@ std::vector<Card*> getBestCardOfEachSuitFromBank(const CardCollection& bank) {
     return bestCards;
 }
 
+/// <summary>
+/// Helper fucntions to remove a card from any collection
+/// </summary>
+/// <param name="collection"></param>
+/// <param name="cardToRemove"></param>
 void removeCardFromCollection(CardCollection& collection, Card* cardToRemove) {
     auto it = std::find(collection.begin(), collection.end(), cardToRemove);
     if (it != collection.end()) {

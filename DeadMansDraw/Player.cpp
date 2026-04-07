@@ -8,6 +8,12 @@
 #include <algorithm>
 
 //Helper functions
+
+/// <summary>
+/// Helper function to sort, format and print a collection of cards. 
+/// </summary>
+/// <param name="collection"></param>
+/// <param name="collectionTitle"></param>
 void printCardCollection(const CardCollection& collection, const std::string collectionTitle) {
     std::cout << collectionTitle << "\n";
 
@@ -73,6 +79,10 @@ bool Player::playCard(Game& game, Card* card) {
     return false;
 }
 
+/// <summary>
+/// Handles the games bust logic, discading cards and baking safe cards from anchor. Then resetting play area. 
+/// </summary>
+/// <param name="game"></param>
 void Player::bust(Game& game) {
     std::cout << "BUST! " << getPlayerName() << " loses all cards in play area.\n";
     CardCollection& discardPile = game.getDiscardPile();
@@ -96,6 +106,10 @@ void Player::bust(Game& game) {
     _anchorIndex = -1;
 }
 
+/// <summary>
+/// Banks all the players cards in play area, checking for any chest and key to activate and clearing play area for next turn.
+/// </summary>
+/// <param name="game"></param>
 void Player::bankCards(Game& game) {
     std::cout << getPlayerName() << " banks the cards in their play area.\n";
 
@@ -107,6 +121,10 @@ void Player::bankCards(Game& game) {
     _anchorIndex = -1;
 }
 
+/// <summary>
+/// Calcualtes and returns the players scores based on the highest value card of each suit in their bank.
+/// </summary>
+/// <returns></returns>
 int Player::getAndCalculateScore() const {
 
     std::map<CardType, int> scoredCardTypes;
@@ -129,10 +147,16 @@ int Player::getAndCalculateScore() const {
     return totalScore;
 }
 
+/// <summary>
+/// Prints the cards in the player's play area to the console.
+/// </summary>
 void Player::printPlayerPlayArea() const {
     printCardCollection(_playArea, getPlayerName() + "'s play area: ");
 }
 
+/// <summary>
+/// Prints the player's bank of cards to the output.
+/// </summary>
 void Player::printPlayerBank() const {
     printCardCollection(_bank, getPlayerName() + "'s bank: ");
 }
