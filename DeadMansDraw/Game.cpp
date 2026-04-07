@@ -1,7 +1,6 @@
 #include "Game.h"
 #include "CardAbilities.h"
 #include "game_title.h"
-
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -45,16 +44,16 @@ Player* Game::getTheOtherPlayer(const Player* currentPlayer) const {
 /// Initializes the game deck by creating and adding all card types with their respective values.
 /// </summary>
 void Game::initializeDeck() {
-    int cardValues[] = { 2,3,4,5,6,7 };
+    int normalCardValues[] = { 2,3,4,5,6,7 };
     int mermaidCardValues[] = { 4,5,6,7,8,9 };
 
     for ( int i = 0; i < 6; i++) {
-        _gameDeck.push_back(new CannonCard(cardValues[i]));
-        _gameDeck.push_back(new ChestCard(cardValues[i]));
-        _gameDeck.push_back(new KeyCard(cardValues[i]));
-        _gameDeck.push_back(new SwordCard(cardValues[i]));
-        _gameDeck.push_back(new HookCard(cardValues[i]));
-        _gameDeck.push_back(new OracleCard(cardValues[i]));
+        _gameDeck.push_back(new CannonCard(normalCardValues[i]));
+        _gameDeck.push_back(new ChestCard(normalCardValues[i]));
+        _gameDeck.push_back(new KeyCard(normalCardValues[i]));
+        _gameDeck.push_back(new SwordCard(normalCardValues[i]));
+        _gameDeck.push_back(new HookCard(normalCardValues[i]));
+        _gameDeck.push_back(new OracleCard(normalCardValues[i]));
         _gameDeck.push_back(new KrakenCard(mermaidCardValues[i]));
 
         //Bonus anchor
@@ -69,6 +68,7 @@ void Game::initializeDeck() {
 /// Randomly shuffles the game deck using the Mersenne Twister algorithm. Algorithm provided by spec sheet. Not seeded
 /// </summary>
 void Game::shuffleDeck() {
+    // Create a temporary vector to hold the cards for shuffling
     CardCollection shuffleDeck{ _gameDeck.begin(), _gameDeck.end() };
 
     //Logic to generate random based on spec sheet
@@ -83,7 +83,7 @@ void Game::shuffleDeck() {
 /// Starts and runs the main game loop, then determines and announces the winner.
 /// </summary>
 void Game::startGame() {
-    //Run game title
+    //Run game title. Provided for this assignment by andrew i beleive?.
     std::cout << GAME_TITLE << "\n";
 
     //Main loop
@@ -123,7 +123,7 @@ void Game::nextTurn() {
 
     std::cout << "Round " << _currentRound << ", Turn " << _currentTurn << ": " << currentPlayer->getPlayerName() << "'s turn.\n";
 
-    //Bank and current score
+    //Print Bank and current score
     currentPlayer->printPlayerBank();
     std::cout << "Current score: " << currentPlayer->getAndCalculateScore() << "\n";
 
@@ -136,11 +136,11 @@ void Game::nextTurn() {
         std::cout << currentPlayer->getPlayerName() << " draws a " << drawnCard->str() << "\n";
 
         //Play drawn card and check if player busted
-        bool busted = currentPlayer->playCard(*this, drawnCard);
+        bool hasPlayerBusted = currentPlayer->playCard(*this, drawnCard);
 
-        if (busted || currentPlayer->getPlayAreaSize() == 0) {
+        if (hasPlayerBusted || currentPlayer->getPlayAreaSize() == 0) {
             //This was needed to fix issues of busting under kraken ability.
-            if (busted) {
+            if (hasPlayerBusted) {
                 currentPlayer->bust(*this);
             }
             turnStillGoing = false;
@@ -150,9 +150,10 @@ void Game::nextTurn() {
 
             //Continue or bank
             char playerChoicePlayOrBank;
-            std::cout << "Do you want to (y) play another card or (n) bank your current cards? ";
+            std::cout << "Do you want to play another card or  bank your current cards? (y/n) ";
             std::cin >> playerChoicePlayOrBank;
 
+            //Only end if they choose no
             if (playerChoicePlayOrBank == 'n' || playerChoicePlayOrBank == 'N') {
                 currentPlayer->bankCards(*this);
                 turnStillGoing = false;
@@ -169,6 +170,7 @@ void Game::nextTurn() {
     _currentTurn++;
     _currentPlayerIndex++;
 
+    // Easier to add wrapping logic here then running modulo related logic checks. 
     if (_currentPlayerIndex >= 2) {
         _currentPlayerIndex = 0;
         _currentRound++;

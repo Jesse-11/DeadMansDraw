@@ -14,23 +14,25 @@
 /// </summary>
 /// <param name="collection"></param>
 /// <param name="collectionTitle"></param>
-void printCardCollection(const CardCollection& collection, const std::string collectionTitle) {
-    std::cout << collectionTitle << "\n";
+void printCardCollection(const CardCollection& collection, const std::string nameOfCollection) {
+    std::cout << nameOfCollection << "\n";
 
     if (collection.empty()) {
         return;
     }
 
-    std::map<CardType, std::vector<Card*>> groupedCards;
+    std::map<CardType, std::vector<Card*>> pairsOfCardsInCollection;
     for (Card* card : collection) {
-        groupedCards[card->getCardType()].push_back(card);
+        pairsOfCardsInCollection[card->getCardType()].push_back(card);
     }
 
-    for (auto& pair : groupedCards) {
+    for (auto& pair : pairsOfCardsInCollection) {
         // Sort descending by value
-        std::sort(pair.second.begin(), pair.second.end(), [](Card* firstCard, Card* secondCard) {
+        std::sort(pair.second.begin(), pair.second.end(), [](Card* firstCard, Card* secondCard) 
+            {
             return firstCard->getCardValue() > secondCard->getCardValue();
-            });
+            }
+        );
 
         for (Card* card : pair.second) {
             std::cout << card->str() << " ";
@@ -40,7 +42,7 @@ void printCardCollection(const CardCollection& collection, const std::string col
 }
 
 
-
+// Randomly assigns name and set anchor to -1 which represents no anchor.
 Player::Player() : _anchorIndex(-1) {
 
     std::string names[] = { "Sam", "Billy", "Jen", "Bob", "Sally", "Joe", "Sue", "Sasha", "Tina", "Marge" };
@@ -127,24 +129,24 @@ void Player::bankCards(Game& game) {
 /// <returns></returns>
 int Player::getAndCalculateScore() const {
 
-    std::map<CardType, int> scoredCardTypes;
+    std::map<CardType, int> scoredSuitAndValueMap;
     
     for (Card* card: _bank) {
         CardType currentCardType = card->getCardType();
         int currentCardValue = card->getCardValue();
 
         // if suit not in map add, otherwise if card value is higher update score
-        if (scoredCardTypes.find(currentCardType) == scoredCardTypes.end() || scoredCardTypes[currentCardType] < currentCardValue) {
-            scoredCardTypes[currentCardType] = currentCardValue;
+        if (scoredSuitAndValueMap.find(currentCardType) == scoredSuitAndValueMap.end() || scoredSuitAndValueMap[currentCardType] < currentCardValue) {
+            scoredSuitAndValueMap[currentCardType] = currentCardValue;
         }
     }
 
-    int totalScore = 0;
-    for (auto const& cardPair : scoredCardTypes) {
+    int totalPlayerScore = 0;
+    for (auto const& cardPair : scoredSuitAndValueMap) {
         //.second is the vlaue of the card
-        totalScore += cardPair.second;
+        totalPlayerScore += cardPair.second;
     }
-    return totalScore;
+    return totalPlayerScore;
 }
 
 /// <summary>
