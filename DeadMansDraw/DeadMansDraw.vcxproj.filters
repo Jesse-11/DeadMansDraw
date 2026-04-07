@@ -48,7 +48,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\OneDrive\UniversityOfAdelaide\Software Engineering\Year 4\Design Patterns in C++\Dead Mans Draw - Class Diagram.pdf" />
-  </ItemGroup>
 </Project>
