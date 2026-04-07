@@ -24,6 +24,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CardAbilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -36,6 +39,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CardAbilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_title.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
