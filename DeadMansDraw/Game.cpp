@@ -87,11 +87,15 @@ void Game::startGame() {
     std::cout << GAME_TITLE << "\n";
 
     //Main loop
-    while (!_gameDeck.empty()) {
+    while (!_gameDeck.empty() && -_currentRound <= 20) {
         nextTurn();
     }
 
     std::cout << "Game over! \n";
+
+    if (_currentRound > 20) {
+        std::cout << "Reached maximum rounds. Ending game.\n";
+    }
 
     _gamePlayers[0]->printPlayerBank();
     _gamePlayers[1]->printPlayerBank();
