@@ -160,6 +160,11 @@ void Game::nextTurn() {
         }
     }
 
+    //Logic to bank cards when the deck runs out (had issues where play area on deck finish was not being added to score)
+    if (_gameDeck.empty() && currentPlayer->getPlayAreaSize() > 0) {
+        currentPlayer->bankCards(*this);
+    }
+
     //Cleanup
     _currentTurn++;
     _currentPlayerIndex++;
