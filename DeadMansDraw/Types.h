@@ -8,6 +8,7 @@ enum class CardType {
 	Cannon, Chest, Key, Anchor, Kraken, Map, Oracle, Mermaid, Hook, Sword
 };
 
+//Forward declaration to avoid circular dependencies
 class Card;
 
 //Recommend in assignment spec.

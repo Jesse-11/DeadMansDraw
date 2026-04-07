@@ -1,7 +1,6 @@
 #include "CardAbilities.h"
 #include "Game.h"
 #include "Player.h"
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,7 +10,7 @@
 // Helper functions
 
 /// <summary>
-/// Helper function to return a valid players choice based on avaliable options (mainly card abilities)
+/// Helper function to get a  players choice based on avaliable options (mainly card abilities)
 /// </summary>
 /// <param name="numberOfPlayerChoices"></param>
 /// <returns>An int referencing an indexed option pasted to the terminal</returns>
@@ -29,13 +28,13 @@ int getCurrentPlayerChoice(int numberOfPlayerChoice) {
 }
 
 /// <summary>
-/// Helper function to return the highest value card of each suit from a players bank
+/// Helper function to get the highest value card of each suit from a players bank
 /// </summary>
-/// <param name="bank"></param>
+/// <param name="playersBank"></param>
 /// <returns>Returns a vector of each hyighest values card of each suit</returns>
-std::vector<Card*> getBestCardOfEachSuitFromBank(const CardCollection& bank) {
+std::vector<Card*> getBestCardOfEachSuitFromBank(const CardCollection& playerBank) {
     std::map<CardType, Card*> bestCardOfEachSuitMap;
-    for (Card* card : bank) {
+    for (Card* card : playerBank) {
         CardType cardType = card->getCardType();
         if (bestCardOfEachSuitMap.find(cardType) == bestCardOfEachSuitMap.end() || card->getCardValue() > bestCardOfEachSuitMap[cardType]->getCardValue()) {
             bestCardOfEachSuitMap[cardType] = card;
@@ -136,19 +135,19 @@ void CannonCard::play(Game& game, Player& player) {
     CardCollection& otherPlayerBank = otherPlayer->getPlayerBank();
 
     if (otherPlayerBank.empty()) {
-        std::cout << "The cards in the other playes Bank, Continuing.\n";
+        std::cout << "No cards in the other playes Bank, Continuing.\n";
         return;
     }
 
-    std::vector<Card*> bestCards = getBestCardOfEachSuitFromBank(otherPlayerBank);
+    std::vector<Card*> bestCardsFromOpponentsBank = getBestCardOfEachSuitFromBank(otherPlayerBank);
     std::cout << "Discarding the top cards of each suit from other players bank: \n";
 
-    for (size_t i = 0; i < bestCards.size(); i++) {
-        std::cout << "(" << i + 1 << ")" << bestCards[i]->str() << "\n";
+    for (size_t i = 0; i < bestCardsFromOpponentsBank.size(); i++) {
+        std::cout << "(" << i + 1 << ")" << bestCardsFromOpponentsBank[i]->str() << "\n";
     }
 
-    int playerChoice = getCurrentPlayerChoice(bestCards.size());
-    Card* cardToDiscard = bestCards[playerChoice - 1];
+    int playerChoice = getCurrentPlayerChoice(bestCardsFromOpponentsBank.size());
+    Card* cardToDiscard = bestCardsFromOpponentsBank[playerChoice - 1];
 
     removeCardFromCollection(otherPlayerBank, cardToDiscard);
     game.getDiscardPile().push_back(cardToDiscard);
@@ -170,15 +169,15 @@ void SwordCard::play(Game& game, Player& player) {
         return;
     }
 
-    std::vector<Card*> bestCards = getBestCardOfEachSuitFromBank(otherPlayerBank);
-    std::cout << "Steal the top cards of each suit from other players bank: \n";
+    std::vector<Card*> bestCardsFromOpponentsBank = getBestCardOfEachSuitFromBank(otherPlayerBank);
+    std::cout << "Stealing the top cards of each suit from other players bank: \n";
 
-    for (size_t i = 0; i < bestCards.size(); i++) {
-        std::cout << "(" << i + 1 << ")" << bestCards[i]->str() << "\n";
+    for (size_t i = 0; i < bestCardsFromOpponentsBank.size(); i++) {
+        std::cout << "(" << i + 1 << ")" << bestCardsFromOpponentsBank[i]->str() << "\n";
     }
 
-    int playerChoice = getCurrentPlayerChoice(bestCards.size());
-    Card* cardToSteal = bestCards[playerChoice - 1];
+    int playerChoice = getCurrentPlayerChoice(bestCardsFromOpponentsBank.size());
+    Card* cardToSteal = bestCardsFromOpponentsBank[playerChoice - 1];
 
     removeCardFromCollection(otherPlayerBank, cardToSteal);
 
@@ -201,15 +200,15 @@ void HookCard::play(Game& game, Player& player) {
         return;
     }
 
-    std::vector<Card*> bestCards = getBestCardOfEachSuitFromBank(playerBank);
+    std::vector<Card*> bestCardsFromPlayersBank = getBestCardOfEachSuitFromBank(playerBank);
     std::cout << "Select the highest-value card from any suit in your bank: \n";
 
-    for (size_t i = 0; i < bestCards.size(); i++) {
-        std::cout << "(" << i + 1 << ")" << bestCards[i]->str() << "\n";
+    for (size_t i = 0; i < bestCardsFromPlayersBank.size(); i++) {
+        std::cout << "(" << i + 1 << ")" << bestCardsFromPlayersBank[i]->str() << "\n";
     }
 
-    int playerChoice = getCurrentPlayerChoice(bestCards.size());
-    Card* cardToPlay = bestCards[playerChoice - 1];
+    int playerChoice = getCurrentPlayerChoice(bestCardsFromPlayersBank.size());
+    Card* cardToPlay = bestCardsFromPlayersBank[playerChoice - 1];
 
     removeCardFromCollection(playerBank, cardToPlay);
 
@@ -234,9 +233,11 @@ void MapCard::play(Game& game, Player& player) {
 
     std::cout << "Drawing up to 3 cards from the discard pile and pick one to add to play area.\n";
     std::vector<Card*> drawnCardOptions;
-    int drawLimit = std::min(3, static_cast<int>(discardPile.size()));
 
-    for (int i = 0; i < drawLimit; i++) {
+    // Limit the number of cards drawn to 3 or the size of the discard pile, whichever ends up being smaller
+    int limitToDrawnCards = std::min(3, static_cast<int>(discardPile.size()));
+
+    for (int i = 0; i < limitToDrawnCards; i++) {
         drawnCardOptions.push_back(discardPile.back());
         discardPile.pop_back();
         std::cout << "(" << i + 1 << ")" << drawnCardOptions.back()->str() << "\n";
