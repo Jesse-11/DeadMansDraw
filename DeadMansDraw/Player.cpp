@@ -4,8 +4,9 @@
 
 #include <iostream>
 #include <map>
+#include <cstdlib>
 
-Player::Player() : _hasAnchor(false) {
+Player::Player() : _anchorIndex(-1) {
 
     std::string names[] = { "Sam", "Billy", "Jen", "Bob", "Sally", "Joe", "Sue", "Sasha", "Tina", "Marge" };
 
@@ -37,7 +38,7 @@ bool Player::playCard(Game& game, Card* card) {
             return true;
         }
     }
-
+    // If cards drawn dont cuase bust, add and play ability
     _playArea.push_back(card);
     card->play(game, *this);
     return false;
@@ -45,4 +46,56 @@ bool Player::playCard(Game& game, Card* card) {
 
 void Player::bust(Game& game) {
     std::cout << "BUST! " << getPlayerName() << " loses all cards in play area.\n";
+    CardCollection& discardPile = game.getDiscardPile();
+
+    //This is my attempt at handling the anchor logic for bonus marks
+    int anchorIndexForDiscarding = 0;
+    if (_anchorIndex != -1) {
+        anchorIndexForDiscarding = _anchorIndex + 1;
+    }
+
+    //Bank safe cards from before the anchor, then discard the rest
+    for (int i = 0; i < anchorIndexForDiscarding; i++) {
+        _bank.push_back(_playArea[i]);
+    }
+    for (size_t i = anchorIndexForDiscarding; i < _playArea.size(); i++) {
+        discardPile.push_back(_playArea[i]);
+    }
+
+    //reset for next turn
+    _playArea.clear();
+    _anchorIndex = -1;
+}
+
+void Player::bankCards(Game& game) {
+    std::cout << getPlayerName() << " banks the cards in their play area.\n";
+
+    for (Card* card : _playArea) {
+        card->chestAndKey(game, *this);
+        _bank.push_back(card);
+    }
+    _playArea.clear();
+    _anchorIndex = -1;
+}
+
+int Player::getAndCalculateScore() const {
+
+    std::map<CardType, int> scoredCardTypes;
+    
+    for (Card* card: _bank) {
+        CardType currentCardType = card->getCardType();
+        int currentCardValue = card->getCardValue();
+
+        // if suit not in map add, otherwise if card value is higher update score
+        if (scoredCardTypes.find(currentCardType) == scoredCardTypes.end() || scoredCardTypes[currentCardType] < currentCardValue) {
+            scoredCardTypes[currentCardType] = currentCardValue;
+        }
+    }
+
+    int totalScore = 0;
+    for (auto const& cardPair : scoredCardTypes) {
+        //.second is the vlaue of the card
+        totalScore += cardPair.second;
+    }
+    return totalScore;
 }

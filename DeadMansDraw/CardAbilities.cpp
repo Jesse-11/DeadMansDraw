@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 // Helper functions
 int getCurrentPlayerChoice(int numChoices) {
@@ -304,6 +305,6 @@ std::string AnchorCard::str() const {
 }
 
 void AnchorCard::play(Game& game, Player& player) {
-    std::cout << "Anchor card played. You are now safe from busting this turn.\n";
-    player.setHasAnchor(true);
+    std::cout << "Anchor card played. Previous cards are safe if you bust.\n";
+    player.setAnchorIndex(player.getPlayAreaSize() - 1);
 }

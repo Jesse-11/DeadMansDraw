@@ -13,7 +13,8 @@ private:
     CardCollection _playArea;
     CardCollection _bank;
 
-    bool _hasAnchor;
+    // -1 means no anchor, otherwise stores the index of the card in play area that is the anchor
+    int _anchorIndex;
 
 public:
     Player();
@@ -34,7 +35,7 @@ public:
     CardCollection& getPlayerBank() { return _bank; }
 
     //Helper functions
-    void setHasAnchor(bool hasAnchorNew) { _hasAnchor = hasAnchorNew; }
+    void setAnchorIndex(int newAnchorIndex) { _anchorIndex = newAnchorIndex; }
     size_t getPlayAreaSize() const { return _playArea.size(); }
 };
 

@@ -5,8 +5,6 @@
 #include "Player.h"
 #include <stdio.h>
 
-std::string names[] = { "Sam", "Billy", "Jen", "Bob", "Sally", "Joe", "Sue", "Sasha", "Tina", "Marge" };
-
 class Game {
 private:
     CardCollection _gameDeck;
